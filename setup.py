@@ -4,14 +4,14 @@
 #   * `Python Project Howto <http://infinitemonkeycorps.net/docs/pph/>`_
 
 from setuptools import setup, find_packages
-import sys, os
+import sys
+import os
 #from Cython.Build import cythonize
 from setuptools.extension import Extension
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.rst')).read()
-
 
 version = '0.1'
 
@@ -23,6 +23,7 @@ install_requires = [
     # "<package1>==0.1",
     # "<package2>==0.3.0",
     # "nose", "coverage"   # Put it here.
+    "python-docx"
 ]
 
 tests_requires = [
@@ -39,18 +40,18 @@ dependency_links = [
     #'https://github.com/<user2>/<package2>/archive/master.zip#egg=<package2>-0.3.0',
 ]
 
-#Cython extension
+# Cython extension
 
-#TOP_DIR="/home/eugeneai/Development/codes/NLP/workprog/tmp/link-grammar"
-#LG_DIR="link-grammar"
-#LG_LIB_DIR=os.path.join(TOP_DIR,LG_DIR,".libs")
-#LG_HEADERS=os.path.join(TOP_DIR)
+# TOP_DIR="/home/eugeneai/Development/codes/NLP/workprog/tmp/link-grammar"
+# LG_DIR="link-grammar"
+# LG_LIB_DIR=os.path.join(TOP_DIR,LG_DIR,".libs")
+# LG_HEADERS=os.path.join(TOP_DIR)
 
-ext_modules=[
-#    Extension("icc.fosgen.cython_module",
-#              sources=["src/./icc.fosgen/cython_module.pyx"],
-#              libraries=["gdal"],
-#    )
+ext_modules = [
+    #    Extension("icc.fosgen.cython_module",
+    #              sources=["src/./icc.fosgen/cython_module.pyx"],
+    #              libraries=["gdal"],
+    #    )
 ]
 
 setup(
@@ -75,22 +76,19 @@ setup(
     url='https://github.com/eugeneai/icc.fosgen',
     license='GPL-3',
     packages=find_packages("src"),
-    package_dir = {'': "src"},
-    namespace_packages = ['icc'],
+    package_dir={'': "src"},
+    namespace_packages=['icc'],
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
-    dependency_links = dependency_links,
+    dependency_links=dependency_links,
     extras_require={
-          'tests': tests_requires,
-          'dev': dev_requires,
+        'tests': tests_requires,
+        'dev': dev_requires,
     },
     test_suite='tests',
-    entry_points={
-        'console_scripts':
-            ['icc.fosgen=icc.fosgen:main']
-    },
+    entry_points={'console_scripts': ['icc.fosgen=icc.fosgen:main']},
     #ext_modules = cythonize(ext_modules),
     #test_suite = 'nose.collector',
-    #setup_requires=['nose>=1.0','Cython','coverage']
+    # setup_requires=['nose>=1.0','Cython','coverage']
 )

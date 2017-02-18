@@ -1,7 +1,7 @@
 import unittest
 
 
-class icc.fosgenTests(unittest.TestCase):
+class icc_fosgenTests(unittest.TestCase):
 
     def setUp(self):
         pass

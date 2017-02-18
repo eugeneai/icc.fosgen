@@ -33,6 +33,14 @@ class TestsSimples:
         assert len(d) >= 5
         assert d[1]
 
+    def test_extractor_table9(self):
+        from icc.fosgen.constants import extract_table9_data, TABLE9
+        from pprint import pprint
+        d = extract_table9_data(TABLE9)
+        pprint(d)
+        sd
+        assert d
+
 
 class ExampleOfAIWorkProgram:
     pass

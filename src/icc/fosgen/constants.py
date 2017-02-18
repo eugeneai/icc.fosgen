@@ -106,3 +106,49 @@ def extract_work_names(text, d=None):
         descr = m.group(2).strip()
         d[int(code)] = descr
     return d
+
+
+def extract_table9_data(table, d=None):
+    """
+    3	знать методы эвристического целенаправленного перебора	ОК-7
+    ОПК-2	2-5		3,4	5					3,4	5
+    """
+    def csplit(cols, l):
+        answer = (cols + [None] * l)[:l]
+        cols = (cols + [None] * l)[l:]
+        return answer, cols
+
+    if d is None:
+        d = {}
+    N = -1
+    ROWRE = re.compile("^(\d+)\t(.*)$")
+    s = ""
+    for row in table.split("\n"):
+        row = row.rstrip("\n") + " "
+        m1 = ROWRE.match(row)
+        if m1 is None:
+            # This is a row continuation
+            s += row
+            continue
+        # Processing s
+        s = s.strip()
+        if not s:
+            s += " " + row
+            continue
+        cols = s.split("\t")
+        n = int(cols[0])
+        if not n >= N:
+            raise ValueError(
+                "Sequence of the first row is not increment monotonously")
+        _,    cols = csplit(cols, 4)
+        labs, cols = csplit(cols, 3)
+        sem,  cols = csplit(cols, 3)
+        srs,  cols = csplit(cols, 3)
+        kp,   cols = csplit(cols, 3)
+
+        d[n] = (_, labs, sem, srs, kp)
+
+        N = n
+        s = row
+
+    return d

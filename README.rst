@@ -1,4 +1,13 @@
-This file requires editing
+FGOS FOS 3+ Table generator
+===========================
+
+Russian government has very astonishing manager stuff: they
+device new form of Work programs of Study courses. So we have to automatize some
+wonderful things while developing those Work programs.
+
+See `test/*.py` as examples.
+
+This file STILL requires editing
 ==========================
 
 Note to the author: Please add something informative to this README *before*

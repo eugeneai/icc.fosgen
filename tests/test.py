@@ -1,7 +1,6 @@
-import unittest
 
 
-class icc_fosgenTests(unittest.TestCase):
+class icc_fosgenTests:
 
     def setUp(self):
         pass
@@ -11,3 +10,16 @@ class icc_fosgenTests(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+
+class TestsSimples:
+
+    def test_extractor(self):
+        from icc.fosgen.constants import extract_comps, COMPETENTIONS
+        d = extract_comps(COMPETENTIONS)
+        print(d)
+        assert len(d) >= 3
+
+
+class ExampleOfAIWorkProgram:
+    pass

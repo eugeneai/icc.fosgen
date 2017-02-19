@@ -68,3 +68,7 @@ class TestTableGenerator:
     def test_table_9_gen(self):
         self.gen.add_table9_WP(page_breaks=False)
         self.save("table9-gen")
+
+    def test_table_1_FOS_gen(self):
+        self.gen.add_table1_FOS(page_breaks=False, semesters=[1, 3, 4])
+        self.save("table1-FOS-gen")

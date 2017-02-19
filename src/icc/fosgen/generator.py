@@ -4,10 +4,10 @@ from docx.shared import Inches
 
 class Generator(object):
 
-    def __init__(self, comps, table9):
+    def __init__(self, comps, table9, template=None):
         self.comps = comps
         self.table9 = table9
-        self.doc = Document()
+        self.doc = Document(template)
 
     def header(self, text, level):
         self.doc.add_heading(text, level)
@@ -96,22 +96,53 @@ class Generator(object):
         if page_breaks:
             self.doc.add_page_break()
 
+    def add_table1_FOS(self, header=True, page_breaks=True, semesters=["XXX"]):
+        if page_breaks:
+            self.doc.add_page_break()
+
+        t1 = self.doc.add_table(rows=len(self.comps) + 1, cols=5)
+        t1.style = 'TableGrid'
+
+        h = t1.rows[0].cells
+
+        headers = """№\nп/п|
+        Контролируемые\nкомпетенции|
+        Контролируемые элементы содержания дисциплины|
+        КИМ|
+        Вид ФОС\n(текущий контроль №1,\nтекущий контроль №2,\nтекущий контроль №3,\nпромежуточная аттестация)"""
+
+        headers = headers.split("|\n")
+
+        [setattr(c, "text", t.strip()) for c, t in zip(h, headers)]
+
+        off = 1
+        for i, it in enumerate(self.comps.items()):
+            code, name = it
+            c = t1.rows[i + off].cells
+            c[0].text = str(i + 1)
+            c[1].text = "{} ({})".format(name, code)
+            for sem in semesters:
+                p3 = c[3].paragraphs[0]
+                p3.add_run("Защита лабораторных работ,\n"
+                           "Контрольные работы и вопросы,\n"
+                           "Защита курсового проекта\n")
+                p3.add_run("\n")
+                p4 = c[4].paragraphs[0]
+                p4.add_run("{} семестр\n".format(sem)).bold = True
+                for tk in range(3):
+                    p4.add_run("Текущий контроль № {}\n".format(tk + 1))
+                p4.add_run("Промежуточная аттестация\n\n")
+
+            p2 = c[2].paragraphs[0]
+            for r9 in self.table9.values():
+                f = r9[0]
+                _, zname, opk = f[:3]
+                pks = [o.strip() for o in opk.split(" ")]
+                if code in pks:
+                    p2.add_run(zname + ";\n")
+
+        if page_breaks:
+            self.doc.add_page_break()
+
     def save(self, filename):
         return self.doc.save(filename)
-"""
-
-table =
-hdr_cells = table.rows[0].cells
-hdr_cells[0].text = 'Qty'
-hdr_cells[1].text = 'Id'
-hdr_cells[2].text = 'Desc'
-for item in recordset:
-    row_cells = table.add_row().cells
-    row_cells[0].text = str(item.qty)
-    row_cells[1].text = str(item.id)
-    row_cells[2].text = item.desc
-
-document.add_page_break()
-
-document.save('demo.docx')
-"""

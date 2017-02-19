@@ -62,7 +62,7 @@ TABLE9 = """1	знать методы формализации с использ
 
 def new_dict(d=None):
     if d is None:
-        return OrderedDict
+        return OrderedDict()
     else:
         return d
 

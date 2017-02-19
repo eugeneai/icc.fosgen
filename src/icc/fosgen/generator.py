@@ -43,9 +43,9 @@ class Generator(object):
             self.doc.add_page_break()
         if header:
             self.doc.add_paragraph(
-                "Таблица 9 – Контролируемые элементы"
+                "Таблица 9 – Контролируемые элементы "
                 "содержания дисциплины и виды учебных работ, "
-                "по результатам выполнения которых и отчета"
+                "по результатам выполнения которых и отчета "
                 "по ним осуществляется текущий контроль")
         t9 = self.doc.add_table(rows=len(self.table9) + 3, cols=4 + 3 * 4)
         t9.style = 'TableGrid'
@@ -141,6 +141,95 @@ class Generator(object):
                 if code in pks:
                     p2.add_run(zname + ";\n")
 
+        if page_breaks:
+            self.doc.add_page_break()
+
+    def add_table2_FOS(self,
+                       header=True,
+                       variant="на весь срок изучения дисциплины",
+                       page_breaks=False,
+                       input=True,
+                       intermediate=True,
+                       test="Экзамен",
+                       weeks=None,
+                       scores=None,
+                       semesters=["XXX"]
+                       ):
+        if page_breaks:
+            self.doc.add_page_break()
+
+        if header:
+            self.doc.add_paragraph(
+                "Таблица 2 – План проведения оценочных мероприятий " + variant)
+
+        items = []
+        items.append(["Вид ФОС",
+                      "Исходные требования к уровню усвоения",
+                      "Объект\nоценивания",
+                      "Вид контроля\n(все виды контроля, "
+                      "используемые в ходе освоения дисциплины)",
+                      "Период\nоценивания",
+                      "Распределение общего кол-ва баллов"
+                      ])
+        for sem in semesters:
+            items.append("{} семестр".format(sem))
+            if input:
+                items.append(["Входной\nконтроль",
+                              "Рабочая\nпрограмма\nдисциплины",
+                              "Конкретизированные результаты"
+                              "предшествующего обучения",
+                              "Опрос",
+                              ])
+            jpoint = len(items)
+            for i in range(3):
+                items.append(["Текущий контроль № {}".format(i + 1),
+                              "Рабочая\nпрограмма\nдисциплины",
+                              "Конкретизированные результаты обучения",
+                              "Защита отчетов по лабораторным работам"
+                              ])
+
+            if intermediate:
+                items.append(["Промежуточная аттестация",
+                              "Рабочая\nпрограмма\nдисциплины",
+                              "Обобщенные результаты обучения по дисциплине",
+                              test,
+                              "Согласно календарному графику учебного процесса"
+                              ])
+
+        t2 = self.doc.add_table(rows=len(items) + 1, cols=6)
+        t2.style = 'TableGrid'
+
+        t2.rows[jpoint].cells[1].merge(t2.rows[jpoint + 2].cells[1])
+        t2.rows[jpoint].cells[2].merge(t2.rows[jpoint + 2].cells[2])
+
+        off = 0
+        for rn, item in enumerate(items):
+            c = t2.rows[rn].cells
+            if isinstance(item, str):
+                c[0].merge(c[-1])
+                c[0].paragraphs[0].add_run(item).bold = True
+                continue
+            for j, jt in enumerate(item):
+                c[j].text = jt
+            if scores and rn > 1:
+                try:
+                    srn = scores[rn - 2]
+                    c[-1].text = "" if srn is None else "{}%".format(srn)
+                except IndexError:
+                    pass
+
+            if weeks and rn > 1:
+                try:
+                    srn = weeks[rn - 2]
+                    c[-2].text = "" if srn is None else "{}-я неделя".format(
+                        srn)
+                except IndexError:
+                    pass
+
+        r = t2.rows[-1].cells
+        r[0].merge(r[-2])
+        r[0].text = "ИТОГО"
+        r[-1].text = "100%"
         if page_breaks:
             self.doc.add_page_break()
 

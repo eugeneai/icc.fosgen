@@ -72,3 +72,11 @@ class TestTableGenerator:
     def test_table_1_FOS_gen(self):
         self.gen.add_table1_FOS(page_breaks=False, semesters=[1, 3, 4])
         self.save("table1-FOS-gen")
+
+    def test_table_2_FOS_gen(self):
+        self.gen.add_table2_FOS(page_breaks=False, input=True, intermediate=True,
+                                weeks=[1, 9, 13, 17],
+                                scores=[None, 30, 15, 15, 40],
+                                semesters=[7]
+                                )
+        self.save("table2-FOS-gen")

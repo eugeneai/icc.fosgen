@@ -37,10 +37,26 @@ class TestsSimples:
         from icc.fosgen.constants import extract_table9_data, TABLE9
         from pprint import pprint
         d = extract_table9_data(TABLE9)
-        pprint(d)
-        sd
+        # pprint(d)
         assert d
 
 
-class ExampleOfAIWorkProgram:
-    pass
+class TestTableGenerator:
+
+    def setUp(self):
+        from icc.fosgen.constants import extract_comps, COMPETENTIONS
+        from icc.fosgen.constants import extract_table9_data, TABLE9
+        from icc.fosgen.constants import extract_work_names, LABS
+        from icc.fosgen.generator import Generator
+        self.comps = extract_comps(COMPETENTIONS)
+        self.table9 = extract_table9_data(TABLE9)
+        self.labs = extract_work_names(LABS)
+
+        self.gen = Generator(comps=self.comps, table9=self.table9)
+
+    def tearDown(self):
+        pass
+
+    def test_paragraph_gen(self):
+        self.gen.add_results(True)
+        self.gen.save("paragraph-gen.docx")

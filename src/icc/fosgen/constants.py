@@ -114,8 +114,8 @@ def extract_table9_data(table, d=None):
     ОПК-2	2-5		3,4	5					3,4	5
     """
     def csplit(cols, l):
-        answer = (cols + [None] * l)[:l]
-        cols = (cols + [None] * l)[l:]
+        answer = (cols + [""] * l)[:l]
+        cols = (cols + [""] * l)[l:]
         return answer, cols
 
     if d is None:

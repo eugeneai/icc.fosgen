@@ -1,3 +1,4 @@
+import os.path
 
 
 class icc_fosgenTests:
@@ -57,6 +58,13 @@ class TestTableGenerator:
     def tearDown(self):
         pass
 
+    def save(self, filename):
+        self.gen.save(os.path.join("test-results", filename + ".docx"))
+
     def test_paragraph_gen(self):
         self.gen.add_results(True)
-        self.gen.save("paragraph-gen.docx")
+        self.save("paragraph-gen")
+
+    def test_table_9_gen(self):
+        self.gen.add_table9()
+        self.save("table9-gen")

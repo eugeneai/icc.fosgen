@@ -31,11 +31,51 @@ class Generator(object):
                     s = s.replace(sect, s, 1)
                     self.doc.add_paragraph(s, style='ListBullet')
 
+    def add_table9(self, header=True, page_breaks=True):
+        # self.doc.add_paragraph(
+        #    "(Таблица размещается на отдельном листе в Landscape)")
+        if page_breaks:
+            self.doc.add_page_break()
+        if header:
+            self.doc.add_paragraph(
+                "Таблица 9 – Контролируемые элементы"
+                "содержания дисциплины и виды учебных работ, "
+                "по результатам выполнения которых и отчета"
+                "по ним осуществляется текущий контроль")
+        t9 = self.doc.add_table(rows=len(self.table9) + 3, cols=4 + 3 * 4)
+        cs = t9.rows[0].cells
+        ls = t9.rows[2].cells
+        cs[0].merge(ls[0])
+        cs[0].text = "№\nп/п"
+        cs[1].merge(ls[1])
+        cs[1].text = "Контролируемые элементы содержания дисциплины"
+        cs[2].merge(ls[2])
+        cs[2].text = "Компетенции"
+        cs[3].merge(ls[3])
+        cs[3].text = "№ раздела, темы\nпо табл. 2"
+
+        cs[4].merge(cs[-1])
+        cs[4].text = "Текущий контроль успеваемости (ТК)"
+
+        off = 4
+        tk = t9.rows[2].cells
+        tk2 = t9.rows[1].cells
+        for i, iname in enumerate(["ЛР № по\nтабл. 3", "ПЗ/СЕМ №\nпо табл.4", "СРС № по\nтабл.5", "КП (КР) №\nпо табл.7"]):
+            a = off + i * 3
+            b = a + 2
+            print(a, b)
+            tk2[a].merge(tk2[b])
+            tk2[a].text = iname
+            for j in range(3):
+                tk[off + i * 3 + j].text = "ТК № {}".format(j + 1)
+        if page_breaks:
+            self.doc.add_page_break()
+
     def save(self, filename):
         return self.doc.save(filename)
 """
 
-table = document.add_table(rows=1, cols=3)
+table =
 hdr_cells = table.rows[0].cells
 hdr_cells[0].text = 'Qty'
 hdr_cells[1].text = 'Id'

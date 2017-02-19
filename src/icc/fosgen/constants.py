@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 
 COMPETENTIONS = """
 способность к самоорганизации и самообразованию (ОК-7);
@@ -59,14 +60,20 @@ TABLE9 = """1	знать методы формализации с использ
 """
 
 
+def new_dict(d=None):
+    if d is None:
+        return OrderedDict
+    else:
+        return d
+
+
 def extract_comps(text, d=None):
     """
     Extracts competention codes from list like above
     mentioned variable COMPETENTIONS.
     `d` - dictionary (or None) to store code->text mapping
     """
-    if d is None:
-        d = {}
+    d = new_dict(d)
     rexp = re.compile("^(.+)(\((.+)\))")
     corerexp = re.compile("(\w+).+(\d+)")
     for l in text.split("\n"):
@@ -92,8 +99,8 @@ def extract_work_names(text, d=None):
     Format:
     <Number> <space> <Name> <end-of-line>
     """
-    if d is None:
-        d = {}
+
+    d = new_dict(d)
     rexp = re.compile("^\s*(\d*)\s*(.*)$")
     for l in text.split("\n"):
         l = l.strip()
@@ -118,8 +125,7 @@ def extract_table9_data(table, d=None):
         cols = (cols + [""] * l)[l:]
         return answer, cols
 
-    if d is None:
-        d = {}
+    d = new_dict(d)
     N = -1
     ROWRE = re.compile("^(\d+)\t(.*)$")
     s = ""

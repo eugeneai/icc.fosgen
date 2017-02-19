@@ -104,3 +104,4 @@ ENV/
 .ropeproject
 
 /test-resilts/*
+/test-results/*.docx

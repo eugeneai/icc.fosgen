@@ -100,6 +100,9 @@ class Generator(object):
         if page_breaks:
             self.doc.add_page_break()
 
+        if header:
+            self.doc.add_paragraph("Таблица 1 – Паспорт ФОС")
+
         t1 = self.doc.add_table(rows=len(self.comps) + 1, cols=5)
         t1.style = 'TableGrid'
 

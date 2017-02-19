@@ -66,5 +66,5 @@ class TestTableGenerator:
         self.save("paragraph-gen")
 
     def test_table_9_gen(self):
-        self.gen.add_table9()
+        self.gen.add_table9_WP(page_breaks=False)
         self.save("table9-gen")

@@ -19,19 +19,24 @@ class Generator(object):
         vals.sort()
         p = self.doc.add_paragraph(
             "В результате изучения дисциплины студенты должны:")
+        lvals = len(vals)
         for sect in ["знать", "уметь", "владеть"]:
             p = self.doc.add_paragraph("")
             r = p.add_run(sect + ":")
             r.bold = True
             r.italic = True
-            for zun in vals:
+            for row, zun in enumerate(vals):
                 s = zun[1][0][1].strip()
                 # ListNumber IntenseQuote
                 if s.startswith(sect):
-                    s = s.replace(sect, s, 1)
-                    self.doc.add_paragraph(s, style='ListBullet')
+                    s = s.replace(sect, "", 1)
+                    if row == lvals - 1:
+                        end = '.'
+                    else:
+                        end = ";"
+                    self.doc.add_paragraph(s + end, style='ListBullet')
 
-    def add_table9(self, header=True, page_breaks=True):
+    def add_table9_WP(self, header=True, page_breaks=True):
         # self.doc.add_paragraph(
         #    "(Таблица размещается на отдельном листе в Landscape)")
         if page_breaks:
@@ -43,6 +48,7 @@ class Generator(object):
                 "по результатам выполнения которых и отчета"
                 "по ним осуществляется текущий контроль")
         t9 = self.doc.add_table(rows=len(self.table9) + 3, cols=4 + 3 * 4)
+        t9.style = 'TableGrid'
         cs = t9.rows[0].cells
         ls = t9.rows[2].cells
         cs[0].merge(ls[0])
@@ -63,11 +69,30 @@ class Generator(object):
         for i, iname in enumerate(["ЛР № по\nтабл. 3", "ПЗ/СЕМ №\nпо табл.4", "СРС № по\nтабл.5", "КП (КР) №\nпо табл.7"]):
             a = off + i * 3
             b = a + 2
-            print(a, b)
             tk2[a].merge(tk2[b])
             tk2[a].text = iname
             for j in range(3):
                 tk[off + i * 3 + j].text = "ТК № {}".format(j + 1)
+
+        t9rows = list(self.table9.items())
+        t9rows.sort()
+        for k, t9row in t9rows:
+            f5, rest = t9row[0], t9row[1:]
+
+            comp = f5[2].strip().replace(" ", "\n")
+            f5[2] = comp
+
+            off = 0
+            c = t9.rows[k + 2].cells
+            for i, it in enumerate(f5):
+                c[off + i].text = it
+            off = 4
+            x = off
+            for i, ig in enumerate(rest):
+                for j, jt in enumerate(ig):
+                    c[x].text = jt
+                    x += 1
+
         if page_breaks:
             self.doc.add_page_break()
 
